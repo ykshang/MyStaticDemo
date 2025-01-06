@@ -1,0 +1,174 @@
+<html>
+  <body>
+    <h2>Hash方式实现前端路由</h2>
+    <div class="main">
+      <div class="container">
+        <div class="title">&lt;a&gt;标签 href属性</div>
+        <div class="content">
+          <a class="a" title="点击链接，跳转到主页" href="#/">Home Page</a>
+          <a class="a" title="点击链接，跳转到Page1" href="#/Page1">Page1</a>
+          <a class="a" title="点击链接，跳转到Page2" href="#/Page2">Page2</a>
+        </div>
+      </div>
+      <div class="container">
+        <div class="title">&lt;button&gt; onclick触发</div>
+        <div class="content">
+          <button title="点击按钮，跳转到主页" class="btn" onclick="clickBtn('#/')">Home Page</button>
+          <button title="点击按钮，跳转到Page1" class="btn" onclick="clickBtn('#/Page1')">Page1</button>
+          <button title="点击按钮，跳转到Page2" class="btn" onclick="clickBtn('#/Page2')">Page2</button>
+        </div>
+
+      </div>
+    </div>
+    <div id="view" class="view">1</div>
+  </body>
+  <script>
+    // 定义 Router
+    class Router {
+      constructor() {
+        this.routes = {}; // 路由表，存放路由path及callback
+      }
+      // 给路由绑定对应的默认处理函数
+      route(path, callback) {
+        this.routes[path] = callback;
+      }
+      // 触发路由变化
+      push(path) {
+        window.location.hash = path; // 改变当前的hash值
+        this.routes[path] && this.routes[path](); // 执行对应回调函数
+      }
+      // hash根据哈希值触发对应的页面刷新
+      refresh(eventType) {
+        return function () {
+          let hash = window.location.hash;
+          let message = '';
+          if (eventType == 'load') {
+            message = "检测到页面刷新("+ eventType + ")，当前hash： " + hash;
+          } else if (eventType == 'hashchange') {
+            message = "检测到Hash值改变("+ eventType + ")，当前hash值即将刷新为： " + hash;
+          }
+          let targetElement = document.getElementById('view');
+          targetElement.textContent = '当前视图为：' + hash;
+          targetElement = null;
+          console.log(message);
+          window.alert(message)
+          if (hash === "#/") {
+            // 更新为首页
+          } else if (hash === "#/Page1") {
+            // 更新页面内容为Page1
+          } else if (hash === "#/Page2") {
+            // 更新页面内容为Page2
+          } else {
+            // 其他页面
+          }
+        };
+      }
+    }
+    // 使用 router
+    window.miniRouter = new Router();
+
+    // 增加监听事件 第一种
+    window.addEventListener("load", miniRouter.refresh('load'), false); // 页面加载时触发
+    window.addEventListener("hashchange", miniRouter.refresh('hashchange'), false); // hash值变化时触发
+
+    // 增加监听事件 第二种
+    // window.onload = miniRouter.refresh("load"); // 页面加载时触发
+    // window.onhashchange = miniRouter.refresh("hashchange"); // hash值变化时触发
+
+    // 注册路由
+    miniRouter.route("/", () => console.log("Home Page"));
+    miniRouter.route("/Page1", () => console.log("Page1"));
+    miniRouter.route("/Page2", () => console.log("Page2"));
+
+    // 路由跳转
+    var clickBtn = function(path) {
+      miniRouter.push(path);
+    }
+  </script>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+    .view {
+      display: flex;
+      width: 800px;
+      background: #e1f3d8;
+      box-sizing: border-box;
+      padding: 20px 15px;
+      margin: 10px;
+      height: 200px;
+    }
+    .main {
+      display: flex;
+      width: 800px;
+      padding: 10px;
+      /* background: yellow; */
+    }
+    .container {
+      display: flex;
+      flex: 1;
+      border: 2px solid #d1d1d1;
+      border-radius: 8px;
+      flex-direction: column;
+      margin: 10px;
+    }
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-self: flex-start;
+    }
+    .a{
+      flex: 0;
+      margin: 10px 20px;
+      font-size: 16px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      color: #409eff;
+      display: inline-flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 8px 12px;
+      width: max-content;
+    }
+    .a:hover {
+      color: #66b1ff;
+      text-decoration: underline;
+    }
+    .title {
+      flex: 1;
+      margin: 5px 10px 10px 10px;
+      color: #606266;
+      font-weight: bold;
+    }
+    .btn {
+      flex: 0;
+      width: max-content;
+      display: inline-block;
+      color: #409eff;
+      border: 1px solid #b3d8ff;
+      border-radius: 4px;
+      text-align: left;
+      background: #ecf5ff;
+      margin: 10px 20px;
+      padding: 8px 12px;
+      line-height: 1;
+      white-space: nowrap;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #409eff;
+      border-color: #409eff;
+      color: #fff;
+    }
+
+  </style>
+</html>
