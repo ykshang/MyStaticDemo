@@ -31,6 +31,7 @@
     //   // 给路由绑定对应的默认处理函数
     //   route(path, callback) {
     //     this.routes[path] = callback;
+    //     console.log('注册路由成功：', path)
     //   }
     //   // 触发路由变化
     //   push(path) {
@@ -71,6 +72,7 @@
       // 给路由绑定对应的默认处理函数
       this.route = function (path, callback) {
         this.routes[path] = callback;
+        console.log('注册路由成功：', path)
       }
       // 触发路由变化
       this.push = function (path) {
@@ -119,9 +121,9 @@
     // window.onhashchange = miniRouter.refresh("hashchange"); // hash值变化时触发
 
     // 注册路由
-    miniRouter.route("/", () => console.log("注册Home Page"));
-    miniRouter.route("/Page1", () => console.log("注册Page1"));
-    miniRouter.route("/Page2", () => console.log("注册Page2"));
+    miniRouter.route("/", () => console.log("页面：Home Page"));
+    miniRouter.route("/Page1", () => console.log("页面：Page1"));
+    miniRouter.route("/Page2", () => console.log("页面：Page2"));
 
     // 路由跳转
     var clickBtn = function(path) {

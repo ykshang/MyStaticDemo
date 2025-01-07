@@ -1,0 +1,169 @@
+<html>
+  <body>
+    <h2>History方式实现前端路由</h2>
+    <strong style="color: red ">需要下载本页面，使用vscode 扩展插件live server代理运行</strong>
+    <strong>放在某个项目根目录下</strong>
+    <div class="main">
+      <div class="container">
+        <div class="title">&lt;button&gt; onclick触发</div>
+        <div class="content">
+          <button
+            title="点击按钮，跳转到主页"
+            class="btn"
+            onclick="clickBtn('/')"
+          >
+            Home Page
+          </button>
+          <button
+            title="点击按钮，跳转到Page1"
+            class="btn"
+            onclick="clickBtn('/Page1')"
+          >
+            Page1
+          </button>
+          <button
+            title="点击按钮，跳转到Page2"
+            class="btn"
+            onclick="clickBtn('/Page2')"
+          >
+            Page2
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="view" class="view">1</div>
+  </body>
+  <script>
+    // 定义 Router对象 class方式 需要浏览器支持ES6
+    // 定义 Router
+    class Router {
+      constructor() {
+        this.routes = {};
+        this.listerPopState();
+      }
+      // 初始化
+      init(path) {
+        window.history.replaceState({ path: path }, null, path);
+        this.routes[path] && this.routes[path]();
+      }
+      // 路由注册，绑定路由对应的处理函数
+      route(path, callback) {
+        this.routes[path] = callback;
+        console.log('注册路由成功：', path)
+      }
+      // 添加历史记录
+      push(path) {
+        window.history.pushState({ path: path }, null, path);
+        this.routes[path] && this.routes[path]();
+      }
+      // 监控路由变化
+      listerPopState() {
+        // 路由变化时会触发popstate事件
+        window.addEventListener("popstate", (e) => {
+          console.log(e);
+          const path = e.state && e.state.path;
+          this.routers[path] && this.routers[path]();
+        });
+      }
+    }
+    // 使用 Router
+    window.miniRouter = new Router();
+    // 使用 实例化 router
+    window.miniRouter = new Router();
+
+    // 注册路由
+    miniRouter.route("/", () => console.log("当前页面：Home Page"));
+    miniRouter.route("/Page1", () => console.log("当前页面：Page1"));
+    miniRouter.route("/Page2", () => console.log("当前页面：Page2"));
+
+    // 路由跳转
+    var clickBtn = function (path) {
+      miniRouter.push(path);
+    };
+  </script>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+    .view {
+      display: flex;
+      width: 800px;
+      background: #e1f3d8;
+      box-sizing: border-box;
+      padding: 20px 15px;
+      margin: 10px;
+      height: 200px;
+    }
+    .main {
+      display: flex;
+      width: 800px;
+      padding: 10px;
+      /* background: yellow; */
+    }
+    .container {
+      display: flex;
+      flex: 1;
+      border: 2px solid #d1d1d1;
+      border-radius: 8px;
+      flex-direction: column;
+      margin: 10px;
+    }
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-self: flex-start;
+    }
+    .a {
+      flex: 0;
+      margin: 10px 20px;
+      font-size: 16px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      color: #409eff;
+      display: inline-flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 8px 12px;
+      width: max-content;
+    }
+    .a:hover {
+      color: #66b1ff;
+      text-decoration: underline;
+    }
+    .title {
+      flex: 1;
+      margin: 5px 10px 10px 10px;
+      color: #606266;
+      font-weight: bold;
+    }
+    .btn {
+      flex: 0;
+      width: max-content;
+      display: inline-block;
+      color: #409eff;
+      border: 1px solid #b3d8ff;
+      border-radius: 4px;
+      text-align: left;
+      background: #ecf5ff;
+      margin: 10px 20px;
+      padding: 8px 12px;
+      line-height: 1;
+      white-space: nowrap;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #409eff;
+      border-color: #409eff;
+      color: #fff;
+    }
+  </style>
+</html>
