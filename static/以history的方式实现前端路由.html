@@ -3,6 +3,7 @@
     <h2>History方式实现前端路由</h2>
     <strong style="color: red ">需要下载本页面，使用vscode 扩展插件live server代理运行</strong>
     <strong>放在某个项目根目录下</strong>
+    <strong>不要刷新页面，本页面未做适配</strong>
     <div class="main">
       <div class="container">
         <div class="title">&lt;button&gt; onclick触发</div>
@@ -10,21 +11,21 @@
           <button
             title="点击按钮，跳转到主页"
             class="btn"
-            onclick="clickBtn('/')"
+            onclick="clickBtn('./')"
           >
             Home Page
           </button>
           <button
             title="点击按钮，跳转到Page1"
             class="btn"
-            onclick="clickBtn('/Page1')"
+            onclick="clickBtn('./Page1')"
           >
             Page1
           </button>
           <button
             title="点击按钮，跳转到Page2"
             class="btn"
-            onclick="clickBtn('/Page2')"
+            onclick="clickBtn('./Page2')"
           >
             Page2
           </button>
@@ -54,7 +55,6 @@
       // 添加历史记录
       push(path) {
         window.history.pushState({ path: path }, null, path);
-        this.routes[path] && this.routes[path]();
       }
       // 监控路由变化
       listerPopState() {
@@ -72,9 +72,9 @@
     window.miniRouter = new Router();
 
     // 注册路由
-    miniRouter.route("/", () => console.log("当前页面：Home Page"));
-    miniRouter.route("/Page1", () => console.log("当前页面：Page1"));
-    miniRouter.route("/Page2", () => console.log("当前页面：Page2"));
+    miniRouter.route("./", () => console.log("当前页面：Home Page"));
+    miniRouter.route("./Page1", () => console.log("当前页面：Page1"));
+    miniRouter.route("./Page2", () => console.log("当前页面：Page2"));
 
     // 路由跳转
     var clickBtn = function (path) {
