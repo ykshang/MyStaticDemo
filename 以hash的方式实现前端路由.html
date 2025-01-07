@@ -23,22 +23,62 @@
     <div id="view" class="view">1</div>
   </body>
   <script>
-    // 定义 Router
-    class Router {
-      constructor() {
-        this.routes = {}; // 路由表，存放路由path及callback
-      }
+    // 定义 Router对象 class方式 需要浏览器支持ES6
+    // class Router {
+    //   constructor() {
+    //     this.routes = {}; // 路由表，存放路由path及callback
+    //   }
+    //   // 给路由绑定对应的默认处理函数
+    //   route(path, callback) {
+    //     this.routes[path] = callback;
+    //   }
+    //   // 触发路由变化
+    //   push(path) {
+    //     window.location.hash = path; // 改变当前的hash值
+    //     this.routes[path] && this.routes[path](); // 执行对应回调函数
+    //   }
+    //   // hash根据哈希值触发对应的页面刷新
+    //   refresh(eventType) {
+    //     return function () {
+    //       let hash = window.location.hash;
+    //       let message = '';
+    //       if (eventType == 'load') {
+    //         message = "检测到页面刷新("+ eventType + ")，当前hash： " + hash;
+    //       } else if (eventType == 'hashchange') {
+    //         message = "检测到Hash值改变("+ eventType + ")，当前hash值即将刷新为： " + hash;
+    //       }
+    //       console.log(message);
+    //       alert(message)
+    //       // 刷新视图
+    //       let targetElement = document.getElementById('view');
+    //       targetElement.textContent = '当前视图为：' + hash;
+    //       if (hash === "#/") {
+    //         targetElement.textContent = '当前视图为：' + hash; // 更新为首页
+    //       } else if (hash === "#/Page1") {
+    //         targetElement.textContent = '当前视图为：' + hash; // 更新页面内容为Page1
+    //       } else if (hash === "#/Page2") {
+    //         targetElement.textContent = '当前视图为：' + hash; // 更新页面内容为Page2
+    //       } else {
+    //         targetElement.textContent = '当前视图为：' + hash; // 其他页面
+    //       }
+    //       targetElement = null; // 释放dom
+    //     };
+    //   }
+    // }
+    // 定义 Router 构造函数方式
+    function Router(params) {
+      this.routes = {}; // 路由表，存放路由path及callback
       // 给路由绑定对应的默认处理函数
-      route(path, callback) {
+      this.route = function (path, callback) {
         this.routes[path] = callback;
       }
       // 触发路由变化
-      push(path) {
+      this.push = function (path) {
         window.location.hash = path; // 改变当前的hash值
         this.routes[path] && this.routes[path](); // 执行对应回调函数
       }
       // hash根据哈希值触发对应的页面刷新
-      refresh(eventType) {
+      this.refresh = function (eventType) {
         return function () {
           let hash = window.location.hash;
           let message = '';
@@ -47,24 +87,27 @@
           } else if (eventType == 'hashchange') {
             message = "检测到Hash值改变("+ eventType + ")，当前hash值即将刷新为： " + hash;
           }
+         
+          console.log(message);
+          alert(message)
+          // 刷新视图
           let targetElement = document.getElementById('view');
           targetElement.textContent = '当前视图为：' + hash;
-          targetElement = null;
-          console.log(message);
-          window.alert(message)
           if (hash === "#/") {
-            // 更新为首页
+            targetElement.textContent = '当前视图为：' + hash; // 更新为首页
           } else if (hash === "#/Page1") {
-            // 更新页面内容为Page1
+            targetElement.textContent = '当前视图为：' + hash; // 更新页面内容为Page1
           } else if (hash === "#/Page2") {
-            // 更新页面内容为Page2
+            targetElement.textContent = '当前视图为：' + hash; // 更新页面内容为Page2
           } else {
-            // 其他页面
+            targetElement.textContent = '当前视图为：' + hash; // 其他页面
           }
+          targetElement = null; // 释放dom
         };
       }
     }
-    // 使用 router
+    
+    // 使用 实例化 router
     window.miniRouter = new Router();
 
     // 增加监听事件 第一种
