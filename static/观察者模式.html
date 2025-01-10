@@ -10,22 +10,22 @@
     // 被观察者
     class Subject {
       constructor() {
-        this.observers = []; // 订阅者列表
+        this.observers = []; // 已经订阅的观察者列表
       }
       // 订阅
-      subscribe(observer) {
+      addObserver(observer) {
         this.observers.push(observer);
       }
       // 取消订阅
-      unsubscribe(observer) {
+      removeObserver(observer) {
         const index = this.observers.indexOf(observer);
         if (index > -1) {
           this.observers.splice(index, 1);
         }
       }
       // 通知
-      notify(data) {
-        this.observers.forEach(observer=> observer.received(data))
+      notify(message) {
+        this.observers.forEach(observer=> observer.received(message))
       }
     }
     // 观察者
@@ -33,16 +33,23 @@
       constructor(name) {
         this.name = name;
       }
-      received(data) {
-        console.log("The observer", this.name, "received data: ", data);
+      received(message) {
+        console.log("The observer", this.name, "received data: ", message);
       }
     }
+
+    // 创建观察者实例
     let observer1 = new Observer('john');
     let observer2 = new Observer('alex');
+
+    // 创建被观察者实例
     let subject = new Subject();
-    subject.subscribe(observer1);
-    subject.subscribe(observer2);
+
+    // 添加两个观察者
+    subject.addObserver(observer1);
+    subject.addObserver(observer2);
     subject.notify('让我观察一下');
+    // 执行结果
     // The observer john received data:  让我观察一下
     // The observer alex received data:  让我观察一下
   </script>
